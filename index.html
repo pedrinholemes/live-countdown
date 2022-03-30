@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CountDown</title>
+    <link rel="stylesheet" href="./public/styles.css" />
+  </head>
+  <body>
+    <div id="dark-mode">0</div>
+    <h1>
+      <span id="hour">00</span><span class="divider" id="hour-divider">:</span
+      ><span id="minute">00</span
+      ><span class="divider" id="minute-divider">:</span
+      ><span id="second">00</span>
+    </h1>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/public/lib/webrtc-ip.build.dev.js"></script>
+    <script type="module" src="./public/main.js"></script>
+  </body>
+</html>
