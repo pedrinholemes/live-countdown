@@ -1,7 +1,8 @@
 ![Banner](./assets/banner.png)
-# LIVE COUNTDOWN
 
-## Captura de Tela
+<h1 align="center">LIVE CONTAINER</h1>
+
+## Capturas de Tela
 
 ![Home](./assets/home.png)
 ![Contador](./assets/contador.png)
@@ -29,7 +30,7 @@ npm run dev
 
 ### Modo de produção(recomendado)
 Você pode utilizar o Live Countdown no modo de produção, onde as alterações não reiniciarão o servidor, conservando seu estado.
-**Lembrando:** o servidor sempre reiniciar estará configurado para uma contagem de 30 minutos, não importando o seu estado anterior.
+**Lembrando:** o servidor sempre que iniciar, ele estará configurado para uma contagem de 30 minutos, não importando o seu estado anterior.
 ```sh
 # Usando Yarnpkg
 yarn start

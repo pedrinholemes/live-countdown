@@ -1,0 +1,14 @@
+{
+  "$schema": "./lib/config.schema.json",
+  "defaultTime": {
+    "hours": 0,
+    "minutes": 30,
+    "seconds": 0
+  },
+  "hosts": [
+    "localhost",
+    "127.0.0.1",
+    "::local_ip"
+  ],
+  "port": 3000
+}

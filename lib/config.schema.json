@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Live Countdown Configuration",
+  "type": "object",
+  "required": [
+    "hosts",
+    "port",
+    "defaultTime"
+  ],
+  "properties": {
+    "hosts": {
+      "type": "array",
+      "default": ["localhost", "127.0.0.1", "::local_ip"],
+      "title": "Hosts do server",
+      "description": "Listagem de todos os hosts onde o servidor WebSocket e HTTP estará disponível.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "port": {
+      "type": "integer",
+      "default": "3000",
+      "title": "Porta",
+      "description": "Porta que o servidor HTTP e WebSocket estará ouvindo, será a mesma independente do host ou protocolo."
+    },
+    "defaultTime": {
+      "type": "object",
+      "default": {
+        "hours": 0,
+        "minutes": 30,
+        "seconds": 0
+      },
+      "title": "Tempo padrão",
+      "description": "Tempo padrão para contagem regressiva",
+      "properties": {
+        "hours": {
+          "type": "integer",
+          "default": 0,
+          "title": "Horas",
+          "description": "Horas"
+        },
+        "minutes": {
+          "type": "integer",
+          "default": 30,
+          "title": "Minutos",
+          "description": "Minutos"
+        },
+        "seconds": {
+          "type": "integer",
+          "default": 0,
+          "title": "Segundos",
+          "description": "Segundos"
+        }
+      }
+    }
+  }
+}

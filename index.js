@@ -7,12 +7,17 @@ import { Server } from "socket.io";
 import { CountDown } from './lib/countdown.js';
 import chalk from 'chalk';
 import ip from 'ip'
+import fs from 'fs'
 
 const resolvePath = (...paths) => path.resolve(process.cwd(), ...paths)
 
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
+
+const configData = fs.readFileSync(resolvePath('config.json'), 'utf8')
+const config = Object.freeze(JSON.parse(configData))
+
 
 const users = {}
 
@@ -116,11 +121,19 @@ app.get('/', (_, res) => res.sendFile(resolvePath('index.html')));
 app.get('/countdown', (_, res) => res.sendFile(resolvePath('countdown.html')));
 app.get('/admin', (_, res) => res.sendFile(resolvePath('admin.html')));
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || config.port || 3000
+
+function formatServerURL(host) {
+  return chalk.bold('http://' + host + (PORT === 80 ? '' : ':' + PORT) + '/')
+}
 
 server.listen(PORT, () => {
   const address = ip.address()
   console.log(chalk.greenBright('[servidor]') + ' ouvindo porta ' + chalk.bold(PORT));
-  console.log(chalk.greenBright('[servidor]') + ' acesse nessa máquina em: ' + chalk.bold('http://localhost'+ (PORT === 80 ? '' : ':' + PORT) + '/'))
-  console.log(chalk.greenBright('[servidor]') + ' acesse na rede local em: ' + chalk.bold('http://' + address + (PORT === 80 ? '' : ':' + PORT) + '/'))
+  console.log(chalk.greenBright('[servidor]') + ' acesse em:')
+  config.hosts.map(host => {
+    if(host === '::local_ip') host = address
+  
+    console.log('           - ' + formatServerURL(host))
+  })
 })
