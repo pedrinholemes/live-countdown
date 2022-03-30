@@ -24,7 +24,7 @@ body {
   align-items: center;
 }
 
-h1 {
+h1#counter {
   position: absolute;
   top: 50%;
   left: 50%;

@@ -1,8 +1,12 @@
+console.clear()
+
 import express from 'express';
 import path from 'path';
 import { createServer } from 'http';
 import { Server } from "socket.io";
 import { CountDown } from './lib/countdown.js';
+import chalk from 'chalk';
+import ip from 'ip'
 
 const resolvePath = (...paths) => path.resolve(process.cwd(), ...paths)
 
@@ -18,6 +22,12 @@ cd.on('tick', () => {
   tickTo(io)
 })
 
+cd.on('end', () =>{
+  console.log(
+    chalk.blueBright('[countdown] ') + 'terminou'
+  )
+})
+
 function tickTo(socket) {
   socket.emit('tick', {
     time: cd.currentTime,
@@ -29,7 +39,9 @@ function tickTo(socket) {
 }
 
 io.on('connection', (socket) => {
-  console.log('New client connected with id: ' + socket.id);
+  socket.onAny((event) => {
+    console.log(chalk.magentaBright('[socket]') + ' evento: ' + chalk.bold(event) + ' emitido por: ' + chalk.bold(socket.id))
+  })
 
   users[socket.id] = {
     id: socket.id,
@@ -37,6 +49,8 @@ io.on('connection', (socket) => {
   }
 
   socket.on('handshake', data => {
+    console.log(chalk.magentaBright('[socket]') + ' novo cliente: ' + chalk.bold(socket.id) + ' conectado como: ' + chalk.bold(data.path))
+
     users[socket.id] = {
       ...users[socket.id],
       id: socket.id,
@@ -83,7 +97,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('disconnect', () => {
-    console.log('Client disconnected with id: ' + socket.id);
+    console.log(chalk.magentaBright('[socket]') + ' cliente desconectado: ' + chalk.bold(socket.id))
     users[socket.id] = {
       ...users[socket.id],
       disconnected: true
@@ -98,19 +112,15 @@ io.on('connection', (socket) => {
 });
 
 app.use('/public', express.static('public'));
-app.get('/', (_, res) => {
-  res.setHeader('Local-IP', _.ip)
-  res.sendFile(resolvePath('index.html'))
-});
-app.get('/admin', (_, res) => {
-  res.setHeader('Local-IP', _.ip)
-  res.sendFile(resolvePath('admin.html'))
-});
+app.get('/', (_, res) => res.sendFile(resolvePath('index.html')));
+app.get('/countdown', (_, res) => res.sendFile(resolvePath('countdown.html')));
+app.get('/admin', (_, res) => res.sendFile(resolvePath('admin.html')));
 
-app.get('/clients', (_, res) => {
-  res.json(users)
-})
+const PORT = process.env.PORT || 3000
 
-server.listen(3000, () => {
-  console.log("HTTPS Server running in 3000 port")
+server.listen(PORT, () => {
+  const address = ip.address()
+  console.log(chalk.greenBright('[servidor]') + ' ouvindo porta ' + chalk.bold(PORT));
+  console.log(chalk.greenBright('[servidor]') + ' acesse nessa máquina em: ' + chalk.bold('http://localhost'+ (PORT === 80 ? '' : ':' + PORT) + '/'))
+  console.log(chalk.greenBright('[servidor]') + ' acesse na rede local em: ' + chalk.bold('http://' + address + (PORT === 80 ? '' : ':' + PORT) + '/'))
 })
